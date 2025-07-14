@@ -86,9 +86,9 @@ $result = $conn->query($sql);
                         </a>
                     </li>
                     <li>
-                        <a href="manage-teachers.php" class="flex items-center px-4 py-3 text-white hover:bg-purple-700 rounded-lg mx-2">
+                        <a href="manage-lawyers.php" class="flex items-center px-4 py-3 text-white hover:bg-purple-700 rounded-lg mx-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3"><path d="M1 22V9.76a2 2 0 0 1 .51-1.33L11.78 1a.7.7 0 0 1 .44 0l10.26 7.43a2 2 0 0 1 .52 1.33V22"/><path d="M5 8v14"/><path d="M19 8v14"/><path d="M9 22v-5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v5"/><path d="M10 7.25h4"/></svg>
-                            Manage Teachers
+                            Manage Lawyers
                         </a>
                     </li>
                     <li>
