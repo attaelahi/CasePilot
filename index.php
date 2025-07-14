@@ -90,7 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,22 +98,107 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-container { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 40px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); z-index: 10; border: 1px solid rgba(255, 255, 255, 0.2); }
+        body {
+            background: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
+            z-index: 1;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px); /* Subtle glassmorphism effect */
+        }
         .system-header { text-align: center; margin-bottom: 30px; }
         .system-logo { font-size: 48px; color: #1e40af; margin-bottom: 10px; display: block; }
         .system-title { color: #1e3a8a; font-size: 28px; font-weight: 700; }
         .system-subtitle { color: #6b7280; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
-        .error-message { background: #fee2e2; border-left: 4px solid #dc2626; color: #991b1b; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; font-size: 14px; }
+        .error-message {
+            background: #fee2e2;
+            border-left: 4px solid #dc2626;
+            color: #991b1b;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
         .input-group { position: relative; margin-bottom: 20px; }
-        .input-group input { width: 100%; padding: 16px 16px 16px 55px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; color: #1f2937; background: #f9fafb; transition: all 0.3s ease; }
-        .input-group input:focus { border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1); outline: none; }
-        .input-group i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #1e40af; font-size: 18px; }
-        .login-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
-        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4); }
+        .input-group input {
+            width: 100%;
+            padding: 16px 16px 16px 55px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #1f2937;
+            background: #f9fafb;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus {
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+            outline: none;
+        }
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1e40af;
+            font-size: 18px;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+        }
         .additional-links { text-align: center; margin-top: 25px; }
-        .additional-links a { color: #1e40af; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s ease; }
+        .additional-links a {
+            color: #1e40af;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
         .additional-links a:hover { text-decoration: underline; }
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .login-container { padding: 20px; max-width: 90%; }
+            .system-title { font-size: 24px; }
+            .system-logo { font-size: 40px; }
+        }
     </style>
 </head>
 <body>

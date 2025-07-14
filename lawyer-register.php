@@ -72,68 +72,170 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CasePilot - Lawyer Registration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
+            z-index: 1;
+        }
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px); /* Subtle glassmorphism effect */
+        }
+        .system-header { text-align: center; margin-bottom: 30px; }
+        .system-logo { font-size: 48px; color: #1e40af; margin-bottom: 10px; display: block; }
+        .system-title { color: #1e3a8a; font-size: 28px; font-weight: 700; }
+        .system-subtitle { color: #6b7280; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .error-message {
+            background: #fee2e2;
+            border-left: 4px solid #dc2626;
+            color: #991b1b;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .success-message {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            color: #065f46;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group input {
+            width: 100%;
+            padding: 16px 16px 16px 55px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #1f2937;
+            background: #f9fafb;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus {
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+            outline: none;
+        }
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1e40af;
+            font-size: 18px;
+        }
+        .register-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+        }
+        .additional-links { text-align: center; margin-top: 25px; }
+        .additional-links a {
+            color: #1e40af;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .additional-links a:hover { text-decoration: underline; }
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .register-container { padding: 20px; max-width: 90%; }
+            .system-title { font-size: 24px; }
+            .system-logo { font-size: 40px; }
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md">
-        <div class="bg-white shadow-2xl rounded-lg p-8 m-4">
-            <div class="text-center mb-6">
-                 <i class="fas fa-balance-scale text-4xl text-blue-600"></i>
-                <h1 class="text-2xl font-bold text-gray-800 mt-2">Create Lawyer Account</h1>
-                <p class="text-gray-500">Join the CasePilot Network</p>
-            </div>
-
-            <?php if ($error): ?>
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <strong class="font-bold">Error:</strong>
-                    <span class="block sm:inline"><?php echo htmlspecialchars($error); ?></span>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($success): ?>
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <strong class="font-bold">Success!</strong>
-                    <span class="block sm:inline"><?php echo htmlspecialchars($success); ?></span>
-                </div>
-            <?php endif; ?>
-
-            <form method="POST" action="lawyer-register.php" class="space-y-4">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
-                    <input class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" id="username" type="text" name="username" placeholder="Choose a username" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email Address</label>
-                    <input class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" id="email" type="email" name="email" placeholder="you@example.com" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
-                    <input class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" id="password" type="password" name="password" placeholder="Min. 8 characters" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="confirm_password">Confirm Password</label>
-                    <input class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" id="confirm_password" type="password" name="confirm_password" placeholder="Re-enter your password" required>
-                </div>
-                <div class="flex items-center justify-between mt-6">
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full" type="submit">
-                        Register
-                    </button>
-                </div>
-                 <div class="text-center mt-4">
-                    <a class="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800" href="index.php">
-                        Already have an account? Login
-                    </a>
-                </div>
-            </form>
+<body>
+    <div class="register-container">
+        <div class="system-header">
+            <i class="fas fa-balance-scale system-logo"></i>
+            <h1 class="system-title">Create Lawyer Account</h1>
+            <p class="system-subtitle">Join the CasePilot Network</p>
         </div>
+
+        <?php if ($error): ?>
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle mr-3"></i>
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($success): ?>
+            <div class="success-message">
+                <i class="fas fa-check-circle mr-3"></i>
+                <?php echo htmlspecialchars($success); ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST" action="lawyer-register.php" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+            <div class="input-group">
+                <input id="username" type="text" name="username" placeholder="Choose a username" required>
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="input-group">
+                <input id="email" type="email" name="email" placeholder="you@example.com" required>
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="input-group">
+                <input id="password" type="password" name="password" placeholder="Min. 8 characters" required>
+                <i class="fas fa-lock"></i>
+            </div>
+            <div class="input-group">
+                <input id="confirm_password" type="password" name="confirm_password" placeholder="Re-enter your password" required>
+                <i class="fas fa-lock"></i>
+            </div>
+            <button type="submit" class="register-btn">
+                <span><i class="fas fa-user-plus mr-2"></i>Register</span>
+            </button>
+            <div class="additional-links">
+                <a href="index.php">Already have an account? Login</a>
+            </div>
+        </form>
     </div>
 </body>
 </html>
